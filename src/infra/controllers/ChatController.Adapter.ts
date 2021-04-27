@@ -5,7 +5,7 @@ export interface Chat {
   id?: string
   attendment_id?: string
   message_id?: number
-  type: "photo" | "voice" | "video" | "video_note" | "document" | "contact" | "audio" | "game" | "sticker" | "location" | "text"
+  type: "photo" | "voice" | "video" | "video_note" | "document" | "contact" | "audio" | "game" | "sticker" | "location" | "text" | "chat"
   text: string | null
   file?: string
   sender?: "client" | "attendant",
@@ -28,9 +28,11 @@ export class ChatControllerAdapter {
 
     switch (chat.type) {
       case "text":
-        const storeText = { ...chat }
-        await this.chatRepository.store({ ...chat })
-        return storeText
+        await this.chatRepository.store(chat)
+        return chat
+      case "chat":
+        await this.chatRepository.store(chat)
+        return chat
       case "photo":
         const storePhoto = { ...chat, text: msg.caption }
         await this.chatRepository.store(storePhoto)

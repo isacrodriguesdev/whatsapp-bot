@@ -1,7 +1,4 @@
-import { Server as SocketController } from "socket.io"
 import { BotController } from "../../../controllers/Bot.Controller"
-import { IMessageController } from "../../../controllers/Message.Controller"
-import { getMsgType } from "../../../helpers/MsgHelper"
 import { socket } from "../../../infra/socketio/SocketConnection"
 import { MsgRequest } from "../../../protocols/MsgRequest"
 import uuidAdapter from "../../../utils/adapters/uuid.Adapter"
@@ -15,11 +12,11 @@ export class SendMessageClientUseCase {
 
   async execute(message: MsgRequest) {
 
+    console.log("message test", message)
+
     let fileName: string | undefined = undefined
 
     // outra plataforma message.photo[message.photo.length - 1].file_id // message[message.type].file_id
-
-    console.log(message)
 
     if (message.type === "photo" || message.type === "image") {
       fileName = await this.botController.downloadFileChat(message)
