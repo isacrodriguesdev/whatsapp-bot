@@ -30,15 +30,16 @@ export class AttendanceRepositoryAdapter implements IAttendanceRepository {
   }
 
   getRandomOperator(departmentId: string): Promise<any> {
-    return knexConnection('operators_bots')
-      .where({ 'operators.status': 'active', 'operators_bots.department_id': departmentId })
+    return knexConnection('operators_branches')
+      .where({ 'operators.status': 'active', 'operators_branches.department_id': departmentId })
       .join('operators', function () {
-        this.on('operators_bots.operator_id', '=', 'operators.id')
+        this.on('operators_branches.operator_id', '=', 'operators.id')
           .onNotExists(function () {
             this.select('*').from('attendance')
-              .whereRaw("operators.id = operators_bots.operator_id and attendance.status = 'closed'");
+              .whereRaw("operators.id = operators_branches.operator_id and attendance.status = 'closed'");
           })
-      }).orderByRaw('random()')
+      })
+      .orderByRaw('RAND()')
       .first()
   }
 
@@ -46,7 +47,7 @@ export class AttendanceRepositoryAdapter implements IAttendanceRepository {
     return knexConnection('attendance')
       .select(
         'attendance.*',
-        'operators.first_name',
+        'operators.name',
         'operators.socket_id'
       )
       .join('operators', { 'attendance.operator_id': 'operators.id' })
@@ -63,12 +64,9 @@ export class AttendanceRepositoryAdapter implements IAttendanceRepository {
     return knexConnection('attendance')
       .select(
         'attendance.*',
-        'users.name',
-        'users.photo',
-        'users.chat',
-        'users.cpf',
-        'users.email',
-        'users.phone'
+        'contacts.name',
+        'contacts.photo',
+        'contacts.chat',
       ).where({
         "attendance.user_id": userId,
         "attendance.status": "ongoing"
@@ -76,7 +74,7 @@ export class AttendanceRepositoryAdapter implements IAttendanceRepository {
         "attendance.user_id": userId,
         "attendance.status": "waiting"
       })
-      .join('users', { 'attendance.user_id': 'users.id' })
+      .join('contacts', { 'attendance.user_id': 'contacts.id' })
       .first()
   }
 }

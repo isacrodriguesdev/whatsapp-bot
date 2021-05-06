@@ -6,17 +6,17 @@ export class MenuRepositoryAdapter implements MenuRepository {
   constructor() {
   }
 
-  getByChildren(children: string | null, botId: string): Promise<any[]> {
-    return knexConnection("menus").where({ children: children, bot_id:botId }).orderBy("order", "asc")
+  getByChildren(parent: string | null, botId: string): Promise<any[]> {
+    return knexConnection("menus").where({ parent: parent, branch_id: botId }).orderBy("order", "asc")
   }
 
-  getById(children: string | null, botId: string): Promise<any[]> {
+  getById(parent: string | null, botId: string): Promise<any[]> {
     return knexConnection("menus")
-      .where({ id: children, bot_id:botId })
+      .where({ id: parent, branch_id:botId })
   }
 
-  getOneById(children: string | null, botId: string): Promise<any[]> {
+  getOneById(parent: string | null, botId: string): Promise<any[]> {
     return knexConnection("menus")
-      .where({ id: children, bot_id:botId })
+      .where({ id: parent, branch_id:botId })
   }
 }

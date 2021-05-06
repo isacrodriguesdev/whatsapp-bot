@@ -13,7 +13,7 @@ export class MenuControllerAdapter {
   ) { }
 
   async sendHomeOrSameMenu(user: User) {
-    const responseMsg: any = await this.menuBuilder.buildInitialMenuOrSame(user.menu_id, user.bot_id)
+    const responseMsg: any = await this.menuBuilder.buildInitialMenuOrSame(user.menu_id, user.branch_id)
 
     const keyboard = user.menu_id !== null ? {
       reply_markup: JSON.stringify({
@@ -23,6 +23,8 @@ export class MenuControllerAdapter {
         ]
       })
     } : undefined
+
+    console.log(responseMsg)
 
     this.messageController.execute(user.chat, responseMsg, keyboard)
   }

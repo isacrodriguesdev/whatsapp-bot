@@ -10,7 +10,7 @@ export class SendMessageAttendanceUseCase {
   execute(socketClient: any, controllers: any[]) {
     socketClient.on("message", async (msg: any) => {
 
-      const index = controllers.findIndex((bot) => bot.id === msg.bot_id)
+      const index = controllers.findIndex((bot) => bot.id === msg.branch_id)
 
       if(msg.type === "text") {
         if(msg.text.trim().length === 0) {
@@ -19,7 +19,6 @@ export class SendMessageAttendanceUseCase {
       }
 
       const chatMessage = await this.chatController.execute(msg, {
-        id: uuidAdapter.newID(),
         type: msg.type,
         attendment_id: msg.attendment_id,
         text: msg.text,

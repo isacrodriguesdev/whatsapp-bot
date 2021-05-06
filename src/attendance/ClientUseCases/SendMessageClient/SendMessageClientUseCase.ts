@@ -12,12 +12,9 @@ export class SendMessageClientUseCase {
 
   async execute(message: MsgRequest) {
 
-    console.log("message test", message)
-
     let fileName: string | undefined = undefined
 
     // outra plataforma message.photo[message.photo.length - 1].file_id // message[message.type].file_id
-
     if (message.type === "photo" || message.type === "image") {
       fileName = await this.botController.downloadFileChat(message)
       message = { ...message, text: message.caption }
@@ -28,10 +25,8 @@ export class SendMessageClientUseCase {
     }
 
     const chatMessage = await this.chatController.execute(message, {
-      id: uuidAdapter.newID(),
       type: message.type,
       attendment_id: message.attendance.id,
-      message_id: message.message_id,
       text: message.text,
       sender: "client",
       file: fileName,
@@ -41,4 +36,5 @@ export class SendMessageClientUseCase {
 
     socket.sockets.emit("message", chatMessage)
   }
+
 }

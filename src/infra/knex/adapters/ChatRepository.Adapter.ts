@@ -3,7 +3,7 @@ import knexConnection from "../knexConnection";
 export class ChatRepositoryAdapter {
 
 	store(message: any) {
-		return knexConnection('chat_attendance')
+		return knexConnection('attendment_messages')
 			.insert(message)
 	}
 }

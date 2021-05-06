@@ -20,7 +20,6 @@ export class SocketControllerAdapter implements ISocketControllerAdapter {
   ) { }
 
   execute(botControllers: any[]) {
-
     socket.use(async (socket: ISocketIO, next) => {
 
       try {
@@ -35,7 +34,8 @@ export class SocketControllerAdapter implements ISocketControllerAdapter {
       }
     })
       .on("connection", (socket: ISocketIO) => {
-        console.log(socket.id)
+
+        console.log("Connected", socket.id)
 
         this.getWaitingAttendanceClient.execute(socket)
         this.sendMessageAttendance.execute(socket, botControllers)

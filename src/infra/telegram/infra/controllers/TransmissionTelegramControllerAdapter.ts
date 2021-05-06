@@ -3,8 +3,10 @@ import { BotController } from "../../../../controllers/Bot.Controller"
 import { TransmissionController } from "../../../../controllers/Transmission.Controller"
 import { IMessageController } from "../../../../controllers/Message.Controller"
 import { TransmissionRepository } from "../../../../repositories/TransmissionRepository"
+import { User } from "../../../../entities/User"
+import { ConfigTransmission } from "../../../../../config"
 
-export class TransmissionWhatsappControllerAdapter implements TransmissionController {
+export class TransmissionTelegramControllerAdapter implements TransmissionController {
 
   async execute(
     botController: BotController,
@@ -13,34 +15,29 @@ export class TransmissionWhatsappControllerAdapter implements TransmissionContro
     botId: string
   ): Promise<void> {
 
-    const loopTime = 1000 * 10
+    const loopTime = 1000 * ConfigTransmission.loop_time_transmission
 
     const transmission = await transmissionRepository.getOne(botId)
-    const sendTransmissionNow = transmission && Date.now() >= new Date(transmission.date_send).getTime()
+    const sendTransmissionNow = transmission && Date.now() >= new Date(transmission.date).getTime()
 
     if (sendTransmissionNow) {
 
-      // const totalLimit = transmission.max_send - transmission.total_sended
-      const transmissionsDevice: any[] = await botController.getTransmissionUsers()
-      const transmissionsRepo: any[] = await transmissionRepository.getTransmissionUsers(transmission.id, botId)
+      const totalLimit = transmission.max_send - transmission.total_sended
 
-      const transmissions = transmissionsDevice.map((t, i) => {
-        if (!transmissionsRepo.find(repo => repo.chat_id === t.id)) {
-          return t.id
-        }
-      }).filter(t => t !== undefined)
-        .slice(0, 3)
+      const transmissionsUsers = await transmissionRepository.getTransmissionUsers(transmission.id, botId, Math.round(totalLimit))
 
-      if (transmissions.length > 0) {
-        const requests = transmissions.map(async (broadcast, i: number) => {
+      if (transmissionsUsers.length > 0) {
+        const requests = transmissionsUsers.map(async (user: User, index: number) => {
           return new Promise((resolve, reject) => {
 
             setTimeout(async () => {
-              if (broadcast) {
+              if (user.chat !== null) {
+
+                console.log("chat", user.chat)
                 try {
 
-                  messageController.execute(broadcast, {
-                    type: "text",
+                  messageController.execute(user.chat, {
+                    type: transmission.message_type,
                     message: transmission.message_text?.toString(),
                     file: transmission.message_file,
                     location: transmission.message_location,
@@ -49,38 +46,25 @@ export class TransmissionWhatsappControllerAdapter implements TransmissionContro
                   })
 
                   resolve(
-                    transmissionRepository.createTransmissionUser(transmission.id, broadcast, botId, "success")
+                    transmissionRepository.createTransmissionUser(transmission.id, user.id, botId)
                   )
 
                 } catch (error) {
                   resolve(
-                    transmissionRepository.createTransmissionUser(transmission.id, broadcast, botId, "failed"
+                    transmissionRepository.createTransmissionUser(transmission.id, user.id, botId, "failed"
                     ))
                 }
               }
-            }, i * 25000)
+            }, index * ConfigTransmission.loop_time_transmission_user)
           })
         })
 
         try {
 
           await Promise.all(requests)
-
-          const today = new Date()
-          const tomorrow = new Date()
-
-          await transmissionRepository.updateTransmissionBot(transmission.id, {
-            total_sended: transmission.total_sended + requests.length,
-            date_send: new Date(tomorrow.setMinutes(today.getMinutes() + 5))
-          })
-
-          if(transmission.status === "waiting") {
-            await transmissionRepository.updateTransmissionBotStatus(transmission.id, "ongoing")
-          }
+          await transmissionRepository.updateTransmissionBotTotalSended(transmission.id, transmission.total_sended + requests.length)
 
         } catch (error) {
-
-          console.log(error)
 
         } finally {
           console.log("Enviei a mensagem para", requests.length)
@@ -101,6 +85,5 @@ export class TransmissionWhatsappControllerAdapter implements TransmissionContro
       setTimeout(() => this.execute(botController, transmissionRepository, messageController, botId), loopTime)
       // console.log("Não há transmissão no momento")
     }
-
   }
 }

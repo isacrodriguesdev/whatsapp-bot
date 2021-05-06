@@ -4,7 +4,6 @@ import { MsgRequest } from "../../protocols/MsgRequest"
 export interface Chat {
   id?: string
   attendment_id?: string
-  message_id?: number
   type: "photo" | "voice" | "video" | "video_note" | "document" | "contact" | "audio" | "game" | "sticker" | "location" | "text" | "chat"
   text: string | null
   file?: string
@@ -43,7 +42,7 @@ export class ChatControllerAdapter {
           file: null,
           text: msg.caption,
           contact_phone_number: msg.contact.phone_number,
-          contact_first_name: msg.contact.first_name,
+          contact_first_name: msg.contact.name,
           contact_user_id: msg.contact.user_id,
         }
         await this.chatRepository.store(storeContact)

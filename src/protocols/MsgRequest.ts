@@ -3,9 +3,9 @@ import { User } from "../entities/User";
 export interface MsgRequest {
     from: {
         user_id: string,
-        bot_id: string,
+        branch_id: string,
         is_bot: boolean | null,
-        first_name: string
+        name: string
         last_name: string | null
         username: string | null
         language_code: string | null
@@ -30,7 +30,6 @@ export interface MsgRequest {
     audio?: any
     game?: any
     sticker?: any
-    message_id: number
 }
 type telegramPhoto = {
     file_id: string

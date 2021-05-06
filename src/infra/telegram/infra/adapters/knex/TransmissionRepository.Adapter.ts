@@ -1,8 +1,7 @@
-import { TransmissionRepository, TransmissionRepositoryStatus } from "../../../repositories/TransmissionRepository"
-import { Bot } from "../../../entities/Bot"
-import { User } from "../../../entities/User"
-import knexConnection from "../knexConnection"
-import uuidAdapter from "../../../utils/adapters/uuid.Adapter"
+import { TransmissionRepository, TransmissionRepositoryStatus } from "../../../../../repositories/TransmissionRepository"
+import uuidAdapter from "../../../../../utils/adapters/uuid.Adapter"
+import knexConnection from "../../../../knex/knexConnection"
+
 // @ts-ignore
 export class TransmissionRepositoryAdapter implements TransmissionRepository {
 
@@ -22,18 +21,14 @@ export class TransmissionRepositoryAdapter implements TransmissionRepository {
   }
 
   getTransmissionUsers(transmissionId: string, botId: string, limit: number): Promise<any> {
-    // return knexConnection("users")
-    //   .whereNotExists(function () {
-    //     this.select("*").from("transmissions_sent")
-    //       .join("bots", "transmissions_sent.branch_id", "=", "bots.id")
-    //       .whereRaw("users.id = transmissions_sent.user_id")
-    //       .where({ transmission_id: transmissionId })
-    //   })
-    //   .where({ branch_id: botId })
-    //   .limit(limit)
-
-    return knexConnection("transmissions_sent")
-      .where({ branch_id: botId, transmission_id: transmissionId })
+    return knexConnection("users")
+      .whereNotExists(function () {
+        this.select("*").from("transmissions_sent")
+          .join("bots", "transmissions_sent.branch_id", "=", "bots.id")
+          .whereRaw("users.id = transmissions_sent.user_id")
+          .where({ transmission_id: transmissionId })
+      })
+      .where({ branch_id: botId })
       .limit(limit)
   }
 
@@ -52,6 +47,7 @@ export class TransmissionRepositoryAdapter implements TransmissionRepository {
   createTransmissionUser(transmissionId: string, userId: string, botId: string, status: "success" | "failed" = "success") {
     return knexConnection("transmissions_sent")
       .insert({
+        id: uuidAdapter.newID(),
         transmission_id: transmissionId,
         user_id: userId,
         branch_id: botId,

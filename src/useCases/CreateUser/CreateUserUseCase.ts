@@ -18,5 +18,4 @@ export class CreateUserUseCase {
       new User({ ...initialUser, photo: null })
     )
   }
-
 }

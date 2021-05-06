@@ -14,6 +14,8 @@ export class MenuBuilder {
     let sameMenu = await this.menuRepository.getByChildren(menuId, botId)
     let context: any = {}
 
+    console.log("!!!!", sameMenu)
+
     if (menuId === null) {
       const childlessMenu = await this.buildChildlessMenu(botId)
       context = { ...childlessMenu }

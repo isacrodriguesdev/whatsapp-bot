@@ -2,7 +2,6 @@
 export interface ChatAttendance {
   id: string
   attendment_id: string
-  message_id: number | null
   type: "photo" | "voice" | "video" | "video_note" | "document" | "contact" | "audio" | "game" | "sticker" | "location" | "text"
   text: string | null
   file?: string | null

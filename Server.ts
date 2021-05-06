@@ -26,12 +26,14 @@ const socketControllerFactory = SocketControllerFactory()
 botRepositoryAdapter.getAll()
 	.then(async robots => {
 
+		console.log("robots", robots)
+
 		const controllers = robots.map(async robot => {
 
 			console.log("🔥", robot.username, "iniciado")
 
 			const botController = new WhatsappBotControllerAdapter()
-			await botController.initialize(robot.token) 
+			await botController.initialize(`session-${robot.id}`) 
 
 			const menuRepositoryAdapter = new MenuRepositoryAdapter()
 

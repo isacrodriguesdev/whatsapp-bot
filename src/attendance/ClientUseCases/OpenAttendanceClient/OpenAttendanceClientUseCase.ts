@@ -27,9 +27,8 @@ export class OpenAttendanceClientUseCase {
     }
 
     const attendance = {
-      id: uuidAdapter.newID(),
       department_id: departmentId,
-      bot_id: msg.user.bot_id,
+      branch_id: msg.user.branch_id,
       user_id: msg.user.id,
       status: "waiting",
       protocol: generateProtocol(),
@@ -43,19 +42,15 @@ export class OpenAttendanceClientUseCase {
 
       if (operator.socket_id) {
         socket.sockets.to(operator.socket_id).emit("an attendment was opened", {
-          id: attendance.id,
-          bot_id: attendance.bot_id,
+          branch_id: attendance.branch_id,
           chat_channel: attendance.chat_channel,
           created_at: attendance.created_at,
           operator_id: attendance.operator_id,
           user_id: attendance.user_id,
           department_id: attendance.department_id,
           chat: msg.user.chat,
-          cpf: msg.user.cpf,
-          email: msg.user.email,
           name: msg.user.name?.toString(),
           photo: msg.user.photo,
-          phone: msg.user.phone,
           last_message_created_at: new Date(),
           last_message_file: null,
           last_message_text: null,
@@ -76,7 +71,7 @@ export class OpenAttendanceClientUseCase {
         message: text(menu[0].message, {
           protocol: attendance.protocol,
           name: msg.user.name,
-          operator: operator.first_name
+          operator: operator.name
         })
       })
 

@@ -5,9 +5,8 @@ export interface ChatLogObjct {
     created_at: string
     file: string
     type: string
-    bot_id: string
+    branch_id: string
     user_id: string
-    message_id: string
     chat_id: string
 }
 
@@ -18,9 +17,8 @@ export class ChatLog {
         readonly created_at: Date,
         readonly file: string, // url de onde esta o arquivo
         readonly type: string,
-        readonly bot_id: string,
+        readonly branch_id: string,
         readonly user_id: string,
-        readonly message_id: string,
         readonly chat_id: string
     ) {
         this.id = uuid.newID()

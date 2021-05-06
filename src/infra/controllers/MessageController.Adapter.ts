@@ -17,6 +17,9 @@ export class MessageControllerAdapter implements IMessageController {
       "text": (chatId: string, msg: MsgResponse, options: any) => {
         return this.botController.sendText(chatId, msg, options)
       },
+      "chat": (chatId: string, msg: MsgResponse, options: any) => {
+        return this.botController.sendText(chatId, msg, options)
+      },
       "voice": (chatId: string, msg: MsgResponse, options: any) => {
         return this.botController.sendAudio(chatId, msg, options)
       },

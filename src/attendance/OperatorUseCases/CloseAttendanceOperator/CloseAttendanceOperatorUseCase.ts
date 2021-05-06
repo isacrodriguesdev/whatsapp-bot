@@ -11,11 +11,9 @@ export class CloseAttendanceOperatorUseCase {
 
   execute(socketClient: any) {
     socketClient.on("event: operator ended attendance", async (attendance: any) => {
-  
       try {
 
         await this.attendanceRepository.updateToClosed(attendance.id)
-        console.log("event: operator ended attendance")
         socketClient.emit("success: operator ended attendance")
 
       } catch (error) {

@@ -44,7 +44,7 @@ export class App {
 			if (!userExists) {
 				const initialUser = {
 					chat: chatId,
-					bot_id: this.robot.id,
+					branch_id: this.robot.id,
 					menu_id: null,
 					name: msg.name,
 				}
@@ -105,7 +105,9 @@ export class App {
 							msgNext = true
 							const menu = await this.menuRepository.getByChildren(id, this.robot.id)
 
-							if (is_attendment && department_id) {
+							console.log(is_attendment, department_id)
+
+							if (is_attendment === "yes" && department_id) {
 
 								const menu = await this.menuRepository.getById(id, this.robot.id)
 								const queue = postAttendance.find((id: string) => id === user.id)
