@@ -20,20 +20,17 @@ const botRepositoryAdapter = new BotRepositoryAdapter()
 const userRepositoryAdapter = new UserRepositoryAdapter()
 
 const socketControllerFactory = SocketControllerFactory()
-
 // faça 2 seletores knex para multi plataforma
 
 botRepositoryAdapter.getAll()
 	.then(async robots => {
-
-		console.log("robots", robots)
 
 		const controllers = robots.map(async robot => {
 
 			console.log("🔥", robot.username, "iniciado")
 
 			const botController = new WhatsappBotControllerAdapter()
-			await botController.initialize(`session-${robot.id}`) 
+			await botController.initialize(`session-${robot.id}`)
 
 			const menuRepositoryAdapter = new MenuRepositoryAdapter()
 
@@ -71,11 +68,11 @@ botRepositoryAdapter.getAll()
 			}
 		})
 
-		const maps = await Promise.all(
+		const bots = await Promise.all(
 			controllers.map(async data => {
 				return data
 			})
 		)
 
-		socketControllerFactory.execute(maps)
+		socketControllerFactory.execute(bots)
 	})

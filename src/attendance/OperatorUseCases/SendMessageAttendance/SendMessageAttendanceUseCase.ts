@@ -1,3 +1,4 @@
+import { BotController } from "../../../controllers/Bot.Controller";
 import { ChatController } from "../../../infra/controllers/ChatController.Adapter";
 import uuidAdapter from "../../../utils/adapters/uuid.Adapter";
 
@@ -12,8 +13,8 @@ export class SendMessageAttendanceUseCase {
 
       const index = controllers.findIndex((bot) => bot.id === msg.branch_id)
 
-      if(msg.type === "text") {
-        if(msg.text.trim().length === 0) {
+      if (msg.type === "text") {
+        if (msg.text.trim().length === 0) {
           return
         }
       }
@@ -26,7 +27,13 @@ export class SendMessageAttendanceUseCase {
         created_at: new Date()
       })
 
-      if (controllers[index]) {
+      const isConnected = await controllers[index].botController.isConnected()
+
+      if(!isConnected) {
+        return
+      }
+
+      if (isConnected && controllers[index] && msg.chat) {
         controllers[index].messageController.execute(msg.chat, {
           ...chatMessage,
           message: `*${msg.operator_name}*\n${msg.text}`

@@ -14,7 +14,7 @@ export class MenuBuilder {
     let sameMenu = await this.menuRepository.getByChildren(menuId, botId)
     let context: any = {}
 
-    console.log("!!!!", sameMenu)
+    //console.log("!!!!", sameMenu)
 
     if (menuId === null) {
       const childlessMenu = await this.buildChildlessMenu(botId)
@@ -57,6 +57,7 @@ export class MenuBuilder {
   }
 
   async buildNextMenu(menuId: string | null, reponseMsg: Menu[], botId: string) {
+    //console.log("ISAC NEWTON", reponseMsg)
 
     if (reponseMsg.length > 1) {
       const messages = { description: reponseMsg[0].title }

@@ -2,16 +2,17 @@ import { UserRepository } from "../../../repositories/UserRepository"
 import { ChatLog } from "../../../entities/ChatLog"
 import { User } from "../../../entities/User"
 import knexConnection from '../knexConnection'
+import { charset } from "mime-types"
 
 export class UserRepositoryAdapter implements UserRepository {
 
   save(userData: User): Promise<void> {
     return knexConnection("contacts")
-      .insert({ ...userData })
+      .insert({ ...userData, chat: userData.chat })
   }
 
   update(chat: string, branch_id: string, data: any): Promise<any> {
-    return knexConnection("contacts").update(data).where({ chat, branch_id })
+    return knexConnection("contacts").update(data).where({ chat: chat, branch_id })
   }
 
   saveData(data: any): Promise<any> {
@@ -21,7 +22,7 @@ export class UserRepositoryAdapter implements UserRepository {
 
   getOne(chat: string, branch_id: string): Promise<any> {
     return knexConnection("contacts").where({
-      chat, branch_id
+      chat: chat, branch_id
     }).first()
   }
 

@@ -56,7 +56,8 @@ export class UpdateUserRegisterUseCase {
     if (currentRegistrationSteps.length > 0) {
       await this.messageController.execute(msg.chatId, { message: currentRegistrationSteps[0].message.toString() })
     } else {
-      return this.menuController.sendHomeOrSameMenu(user)
+      this.menuController.sendHomeOrSameMenu(user)
+      return "finish"
     }
 
 

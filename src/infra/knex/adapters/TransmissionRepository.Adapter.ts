@@ -43,7 +43,7 @@ export class TransmissionRepositoryAdapter implements TransmissionRepository {
       .update("status", status)
   }
 
-  updateTransmissionBotTotalSended(transmissionId: string, totalSended: number) {
+  updateTransmissionBotTotalSended(transmissionId: number, totalSended: number) {
     return knexConnection("transmission_branches")
       .where({ transmission_id: transmissionId })
       .update("total_sended", totalSended)

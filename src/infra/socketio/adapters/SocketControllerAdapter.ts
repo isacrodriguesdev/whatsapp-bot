@@ -21,7 +21,6 @@ export class SocketControllerAdapter implements ISocketControllerAdapter {
 
   execute(botControllers: any[]) {
     socket.use(async (socket: ISocketIO, next) => {
-
       try {
         const userDecoded = await this.jwtControllerAdpter.verifyToken(socket.handshake.query.authorization)
         await this.attendantRepository.update(userDecoded.id, {

@@ -30,7 +30,7 @@ export class SendMessageClientUseCase {
       text: message.text,
       sender: "client",
       file: fileName,
-      read: false,
+      read: 1,
       created_at: new Date()
     })
 

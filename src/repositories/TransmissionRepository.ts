@@ -7,4 +7,5 @@ export interface TransmissionRepository {
   updateTransmissionBotStatus(transmissionBotId: string, status: TransmissionRepositoryStatus): Promise<any>
   createTransmissionUser(transmissionBotId: string, chatId: string, botId: string, status?: "success" | "failed"): Promise<any>
   updateTransmissionBot(transmissionBotId: string, data: any): Promise<any>
+  updateTransmissionBotTotalSended(transmissionId: number, totalSended: number): Promise<any>
 }

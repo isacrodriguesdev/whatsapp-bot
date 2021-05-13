@@ -1,4 +1,5 @@
 
+import { BotController } from "../../../controllers/Bot.Controller";
 import { JwtControllerAdpter } from "../../../helpers/jwt/JwtControllerAdpter";
 import { AttendantRepositoryAdapter } from "../../knex/adapters/AttendantRepository.Adpter";
 import { SocketControllerAdapter } from "../adapters/SocketControllerAdapter";
@@ -14,7 +15,6 @@ export function SocketControllerFactory() {
   const getWaitingAttendanceClientFactory = GetWaitingAttendanceClientFactory()
   const sendMessageAttendanceFactory = SendMessageAttendanceFactory()
   const closeAttendanceOperatorFactory = CloseAttendanceOperatorFactory()
-
 
   return new SocketControllerAdapter(
     attendantRepository,

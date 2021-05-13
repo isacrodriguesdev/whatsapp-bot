@@ -12,7 +12,7 @@ export class MessageControllerAdapter implements IMessageController {
   ) { }
 
   execute(chatId: string, msg: MsgResponse, options = {}): Promise<any> {
-
+    console.log("Menu Imagem", msg)
     const sender = {
       "text": (chatId: string, msg: MsgResponse, options: any) => {
         return this.botController.sendText(chatId, msg, options)

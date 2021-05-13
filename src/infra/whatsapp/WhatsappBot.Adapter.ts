@@ -60,7 +60,7 @@ export class WhatsappBotControllerAdapter implements BotController {
   }
 
   public sendPhoto(chat: string, msg: MsgResponse): Promise<any> {
-    return this.whatsappBot.sendImage(chat, msg.file, "name")
+    return this.whatsappBot.sendImage(chat, msg.file, "name", msg.message)
   }
 
   public sendAudio(chat: string, msg: MsgResponse): Promise<any> {
@@ -86,5 +86,9 @@ export class WhatsappBotControllerAdapter implements BotController {
 
   public sendContact(chat: string, msg: MsgResponse): Promise<any> {
     return this.whatsappBot.sendContactVcard(chat, msg.phone_number, msg.phone_firstname)
+  }
+
+  public isConnected() {
+    return this.whatsappBot.isConnected()
   }
 }

@@ -30,6 +30,8 @@ export class App {
 
 		let userRegistrationSteps: any[] = []
 		let postAttendance: string[] = []
+		let registeredNow: string[] = []
+		let askingForName: string[] = []
 
 		this.botController.onMessage(async (msg: any) => {
 
@@ -46,31 +48,55 @@ export class App {
 					chat: chatId,
 					branch_id: this.robot.id,
 					menu_id: null,
-					name: msg.name,
+					name: null,
 				}
 				await CreateUserFactory(this.botController)
 					.execute(initialUser, msg)
+
+				// registeredNow.push(chatId)
 			}
 
 			let user = await this.userRepository.getOne(chatId, this.robot.id)
 
+			// const findRegisteredNow = registeredNow.find(number => number === chatId)
+			const findAskingForName = askingForName.find(number => number === chatId)
+
+			if (findAskingForName) {
+				if (!isNumber(msg.text) && msg.text.length < 30) {
+					await this.userRepository.update(chatId, this.robot.id, { name: msg.text })
+					askingForName = askingForName.filter(number => number !== chatId)
+				} else {
+					return this.messageController.execute(chatId, { message: "Por favor, informe seu nome corretamente" })
+				}
+			}
+
+			if (!user.name && !findAskingForName) {
+
+				if (msg.name) {
+					await this.userRepository.update(chatId, this.robot.id, { name: msg.name })
+				} else {
+					this.messageController.execute(chatId, { message: "Diga seu nome" })
+					askingForName.push(chatId)
+					return
+				}
+			}
+
 			if (!userRegistrationSteps.find(userRegistration => userRegistration.id === user.id)) {
+
 				const botRegistrationSteps: any[] = await botQuestionsUserController.execute(this.robot.id, user.id)
+
 				if (botRegistrationSteps.length > 0) {
 					userRegistrationSteps.push({ id: user.id, steps: [null, ...botRegistrationSteps] })
-				} else {
-					userRegistrationSteps.push({ id: user.id, steps: [] })
 				}
 			}
 
 			const currentUserRegistrationStep = userRegistrationSteps.find(userRegistration => userRegistration.id === user.id)
 
 			if (currentUserRegistrationStep && currentUserRegistrationStep.steps.length > 0) {
-				return updateUserRegisterController.execute(currentUserRegistrationStep.steps, msg, user)
-			}
-
-			if (!user.name) {
-				await this.userRepository.update(chatId, this.robot.id, { name: msg.name })
+				const status = await updateUserRegisterController.execute(currentUserRegistrationStep.steps, msg, user)
+				if (status === "finish") {
+					userRegistrationSteps = userRegistrationSteps.filter((userRegistration: any) => userRegistration.id !== user.id)
+				}
 			}
 
 			const attendance = await this.attendanceRepository.getAttendance(user.id)
@@ -82,7 +108,7 @@ export class App {
 			let botMenu: any[] = []
 
 			// @ts-ignore
-			if (msg.text && ["voltar", "#"].includes(msg.text.toLowerCase())) {
+			if (msg.text && ["voltar", "#", "0"].includes(msg.text.toLowerCase())) {
 
 				await this.userRepository.saveCurrentMenu(user, null)
 				const userMenu = await this.menuRepository.getByChildren(null, this.robot.id)
@@ -97,7 +123,8 @@ export class App {
 
 			let msgNext = false
 
-			if (isNumber(msg.text)) {
+			if (isNumber(msg.text) && msg.text != "0") {
+				//console.log("Recebeu a mensagem ", msg.text, msg.chatId)
 				await Promise.all(
 					botMenu.map(async ({ id, order, is_attendment, department_id }: Menu) => {
 						if (msg.text == order) {
@@ -105,7 +132,7 @@ export class App {
 							msgNext = true
 							const menu = await this.menuRepository.getByChildren(id, this.robot.id)
 
-							console.log(is_attendment, department_id)
+							//console.log(is_attendment, department_id)
 
 							if (is_attendment === "yes" && department_id) {
 
@@ -129,7 +156,7 @@ export class App {
 				)
 
 				if (msgNext === false) {
-
+					await this.messageController.execute(chatId, { message: "Opção inválida" })
 				}
 
 			}

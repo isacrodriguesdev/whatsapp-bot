@@ -19,4 +19,5 @@ export interface BotController {
     getAndDownloadUserPhoto(message: any): Promise<string>,
     getAllGroups(): Promise<any>
     getTransmissionUsers(limit?: number): Promise<any[]>
+    isConnected(): Promise<boolean>
 }

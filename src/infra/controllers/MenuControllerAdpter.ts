@@ -24,7 +24,7 @@ export class MenuControllerAdapter {
       })
     } : undefined
 
-    console.log(responseMsg)
+    //console.log(responseMsg)
 
     this.messageController.execute(user.chat, responseMsg, keyboard)
   }

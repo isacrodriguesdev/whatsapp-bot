@@ -2,6 +2,7 @@ import { TransmissionRepository, TransmissionRepositoryStatus } from "../../../.
 import uuidAdapter from "../../../../../utils/adapters/uuid.Adapter"
 import knexConnection from "../../../../knex/knexConnection"
 
+//@ts-ignore
 export class TransmissionWhatsappRepositoryAdapter implements TransmissionRepository {
 
   getOne(botId: string) {

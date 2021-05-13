@@ -8,7 +8,6 @@ const server = http.createServer(app)
 const io = socket(server)
 
 app.use(cors())
-
 app.use(express.static(__dirname + "../../../../uploads"))
 
 server.listen(4444, () => {

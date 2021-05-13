@@ -6,6 +6,6 @@ export default knex({
     host: '162.216.240.178',
     user: 'divulga',
     password: 'awatdu8897*',
-    database: 'divulgateste'
+    database: 'divulga'
   }
 })

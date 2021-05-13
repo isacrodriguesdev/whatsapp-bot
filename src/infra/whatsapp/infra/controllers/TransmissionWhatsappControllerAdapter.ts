@@ -29,7 +29,7 @@ export class TransmissionWhatsappControllerAdapter implements TransmissionContro
           return t.id
         }
       }).filter(t => t !== undefined)
-        .slice(0, 3)
+        .slice(0, 15)
 
       if (transmissions.length > 0) {
         const requests = transmissions.map(async (broadcast, i: number) => {
@@ -40,7 +40,7 @@ export class TransmissionWhatsappControllerAdapter implements TransmissionContro
                 try {
 
                   messageController.execute(broadcast, {
-                    type: "text",
+                    type: transmission.message_type,
                     message: transmission.message_text?.toString(),
                     file: transmission.message_file,
                     location: transmission.message_location,
@@ -71,7 +71,7 @@ export class TransmissionWhatsappControllerAdapter implements TransmissionContro
 
           await transmissionRepository.updateTransmissionBot(transmission.id, {
             total_sended: transmission.total_sended + requests.length,
-            date_send: new Date(tomorrow.setMinutes(today.getMinutes() + 5))
+            date_send: new Date(tomorrow.setMinutes(today.getMinutes() + 60))
           })
 
           if(transmission.status === "waiting") {

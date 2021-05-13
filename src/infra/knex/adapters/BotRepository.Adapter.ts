@@ -1,6 +1,7 @@
 import { IBotRepository } from "../../../repositories/BotRepository"
 import { Bot } from "../../../entities/Bot"
 import knexConnection from "../knexConnection"
+import { cloudId } from "../../../../cloud"
 
 export class BotRepositoryAdapter implements IBotRepository {
 
@@ -39,7 +40,8 @@ export class BotRepositoryAdapter implements IBotRepository {
   getAll(): Promise<Bot[]> {
     return knexConnection("branches")
       .select("branches.*")
-      .where("branches_config.active", 1)
-      .join("branches_config", { "branches.id": "branches_config.branch_id" })
+      //.where("branches_config.active", 1)
+      .where("branches.id", cloudId)
+      //.join("branches_config", { "branches.id": "branches_config.branch_id" })
   }
 }
