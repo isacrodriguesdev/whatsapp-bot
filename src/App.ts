@@ -1,19 +1,19 @@
-import { BotController } from "./src/controllers/Bot.Controller";
-import { IMessageController } from "./src/controllers/Message.Controller";
-import { MenuRepository } from "./src/repositories/MenuRespository";
-import { UserRepository } from "./src/repositories/UserRepository";
-import { Bot } from "./src/entities/Bot";
-import { Menu } from "./src/entities/Menu";
-import { isNumber } from "./src/helpers/MsgHelper";
-import { MsgRequest } from "./src/protocols/MsgRequest";
+import { BotController } from "./controllers/Bot.Controller";
+import { IMessageController } from "./controllers/Message.Controller";
+import { MenuRepository } from "./repositories/MenuRespository";
+import { UserRepository } from "./repositories/UserRepository";
+import { Bot } from "./entities/Bot";
+import { Menu } from "./entities/Menu";
+import { isNumber } from "./helpers/MsgHelper";
+import { MsgRequest } from "./protocols/MsgRequest";
 // factories
-import { OpenAttendanceClientFactory } from "./src/infra/socketio/factories/OpenAttendanceClientFactory";
-import { SendMessageClientFactory } from "./src/infra/socketio/factories/SendMessageClientFactory";
-import { IAttendanceRepository } from "./src/repositories/AttendanceRepository";
-import { CreateUserFactory } from "./src/factories/CreateUserFactory";
-import { UpdateUserRegisterFactory } from "./src/factories/UpdateUserRegisterFactory";
-import { BotQuestionsUserFactory } from "./src/infra/factories/BotQuestionsUserFactory";
-import { MenuFactory } from "./src/factories/MenuFactory"
+import { OpenAttendanceClientFactory } from "./infra/socketio/factories/OpenAttendanceClientFactory";
+import { SendMessageClientFactory } from "./infra/socketio/factories/SendMessageClientFactory";
+import { IAttendanceRepository } from "./repositories/AttendanceRepository";
+import { CreateUserFactory } from "./factories/CreateUserFactory";
+import { UpdateUserRegisterFactory } from "./factories/UpdateUserRegisterFactory";
+import { BotQuestionsUserFactory } from "./infra/factories/BotQuestionsUserFactory";
+import { MenuFactory } from "./factories/MenuFactory"
 
 export class App {
 

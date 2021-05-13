@@ -1,4 +1,4 @@
-import { App } from './App'
+import { App } from './src/App'
 import { TransmissionTelegramControllerAdapter } from './src/infra/telegram/infra/controllers/TransmissionTelegramControllerAdapter'
 import { TransmissionWhatsappControllerAdapter } from './src/infra/whatsapp/infra/controllers/TransmissionWhatsappControllerAdapter'
 import { BotRepositoryAdapter } from './src/infra/knex/adapters/BotRepository.Adapter'
