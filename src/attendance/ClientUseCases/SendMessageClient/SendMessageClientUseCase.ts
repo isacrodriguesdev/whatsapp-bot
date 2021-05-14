@@ -23,6 +23,9 @@ export class SendMessageClientUseCase {
       fileName = await this.botController.downloadFileChat(message)
       message = { ...message, text: message.caption }
     }
+    else if (message.type === "ptt") {
+      fileName = await this.botController.downloadFileChat(message)
+    }
 
     const chatMessage = await this.chatController.execute(message, {
       type: message.type,

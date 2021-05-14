@@ -35,17 +35,14 @@ export class WhatsappBotControllerAdapter implements BotController {
     })
   }
 
-  async downloadFileChat(message: any): Promise<any>{
-    if (message.isMedia === true || message.isMMS === true) {
-      const buffer = await this.whatsappBot.decryptFile(message.message)
-      const fileName = `${md5((Date.now() + Math.random() * 9999).toString())}.${mime.extension(message.mimetype)}`
-      fs.writeFile(`uploads/files/${fileName}`, buffer, (err) => {
-        if(err) 
-          console.log("Erro ao gravar arquivo enviado do cliente que está em atendimento", message.to, err)
-      })
-
-      return fileName
-    }
+  async downloadFileChat(message: any): Promise<any> {
+    const buffer = await this.whatsappBot.decryptFile(message.message)
+    const fileName = `${md5((Date.now() + Math.random() * 9999).toString())}.${mime.extension(message.mimetype)}`
+    fs.writeFile(`uploads/files/${fileName}`, buffer, (err) => {
+      if (err)
+        console.log("Erro ao gravar arquivo enviado do cliente que está em atendimento", message.to, err)
+    })
+    return fileName
   }
 
   async getTransmissionUsers(): Promise<any[]> {

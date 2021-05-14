@@ -18,7 +18,7 @@ export interface MsgRequest {
     caption: string | null,
     attendance: any,
     user: User,
-    type: "photo" | "voice" | "video" | "video_note" | "document" | "contact" | "audio" | "game" | "sticker" | "location" | "text" | "image"
+    type: "photo" | "voice" | "video" | "video_note" | "document" | "contact" | "audio" | "game" | "sticker" | "location" | "text" | "image" | "ptt"
     text: string | null
     voice?: any
     photo: telegramPhoto[]

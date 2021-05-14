@@ -132,8 +132,6 @@ export class App {
 							msgNext = true
 							const menu = await this.menuRepository.getByChildren(id, this.robot.id)
 
-							//console.log(is_attendment, department_id)
-
 							if (is_attendment === "yes" && department_id) {
 
 								const menu = await this.menuRepository.getById(id, this.robot.id)
