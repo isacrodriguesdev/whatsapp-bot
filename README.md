@@ -1,2 +1,1 @@
-# solid-tgbot
-# divulgaamigo-bot
+# solid project
